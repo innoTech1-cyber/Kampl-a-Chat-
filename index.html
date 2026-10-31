@@ -1,1 +1,60 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAMPL'A CHAT</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#0a1931;color:white;height:100vh;display:flex;flex-direction:column}
+header{background:#0f2a5a;padding:15px;display:flex;justify-content:space-between;align-items:center}
+header h1 span{color:#4da3ff}
+#loginBox{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;background:linear-gradient(180deg,#0a1931,#122a5c)}
+#loginBox input{width:90%;max-width:320px;padding:14px;border-radius:30px;border:none;margin:10px;background:#162d5e;color:white;text-align:center;font-size:16px;outline:none}
+#loginBox button{width:90%;max-width:320px;padding:14px;border-radius:30px;border:none;background:#1e5bff;color:white;font-weight:800;margin-top:10px;cursor:pointer}
+#app{display:none;flex:1;flex-direction:column;overflow:hidden}
+#users{flex:1;overflow-y:auto;padding:10px}
+.user{padding:14px;background:#11264f;margin:6px 0;border-radius:12px;display:flex;justify-content:space-between;cursor:pointer;border:1px solid #1a3a6e}
+.user:hover{background:#17346a}
+.user b{color:#7db4ff}
+#chatWin{display:none;flex:1;flex-direction:column;background:#08142b}
+#chatHeader{background:#0f2a5a;padding:12px;display:flex;align-items:center;gap:10px}
+#chatHeader button{background:#1e5bff;border:none;color:white;padding:8px 14px;border-radius:20px;cursor:pointer}
+#msgs{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:75%;padding:10px 14px;border-radius:18px;font-size:15px}
+.me{align-self:flex-end;background:#1e5bff;border-bottom-right-radius:4px}
+.other{align-self:flex-start;background:#162d5e;border-bottom-left-radius:4px}
+#sendBar{display:flex;padding:10px;background:#0f2a5a;gap:8px}
+#sendBar input{flex:1;padding:12px;border-radius:30px;border:none;background:#162d5e;color:white;outline:none}
+#sendBar button{padding:12px 20px;border-radius:30px;border:none;background:#1e5bff;color:white;font-weight:800;cursor:pointer}
+small{opacity:0.6;font-size:11px;display:block;margin-top:4px}
+</style>
+</head>
+<body>
+<header><h1>KAMPL'A <span>CHAT</span></h1><div id="myName"></div></header>
+<div id="loginBox"><h2 style="color:#7db4ff">KAMPL'A CHAT</h2><p style="margin:10px 0 20px;opacity:0.7">Dark Blue Edition</p><input id="username" placeholder="Enter name e.g. Inno"><button onclick="login()">START CHATTING</button></div>
+<div id="app"><div id="users"></div><div id="chatWin"><div id="chatHeader"><button onclick="closeChat()">← Back</button><b id="chatWith"></b></div><div id="msgs"></div><div id="sendBar"><input id="msgInput" placeholder="Type message..." onkeypress="if(event.key==='Enter')sendMsg()"><button onclick="sendMsg()">SEND</button></div></div></div>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAGzXyxBHmvBcWwoyWo4Xjn_1pGRyQjO_M",
+  authDomain: "hittvapp1-29f3a.firebaseapp.com",
+  databaseURL: "https://hittvapp1-29f3a-default-rtdb.firebaseio.com",
+  projectId: "hittvapp1-29f3a",
+  storageBucket: "hittvapp1-29f3a.firebasestorage.app",
+  messagingSenderId: "567256630691",
+  appId: "1:567256630691:web:5e6e22fe24416eb3270616",
+  measurementId: "G-1JKDEMDGWT"
+};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+let me="",currentChat="";
+function login(){me=document.getElementById('username').value.trim();if(!me)return alert("Enter name");document.getElementById('loginBox').style.display='none';document.getElementById('app').style.display='flex';document.getElementById('myName').innerText=me;db.ref("kampla_users/"+me).set({online:true,lastSeen:Date.now()});loadUsers();}
+function loadUsers(){db.ref("kampla_users").on("value",snap=>{let html="";snap.forEach(u=>{if(u.key!==me){html+=`<div class="user" onclick="openChat('${u.key}')"><b>${u.key}</b><span style="font-size:12px">● online</span></div>`;}});document.getElementById('users').innerHTML=html||"<p style='text-align:center;opacity:0.5;margin-top:50px'>No users yet. Open on another phone!</p>";});}
+function openChat(user){currentChat=user;document.getElementById('users').style.display='none';document.getElementById('chatWin').style.display='flex';document.getElementById('chatWith').innerText=user;let chatId=[me,user].sort().join("_");db.ref("kampla_msgs/"+chatId).on("value",snap=>{let h="";snap.forEach(m=>{let d=m.val();let cls=d.from===me?"me":"other";h+=`<div class="msg ${cls}">${d.text}<small>${d.from} • ${new Date(d.time).toLocaleTimeString()}</small></div>`;});document.getElementById('msgs').innerHTML=h;document.getElementById('msgs').scrollTop=99999;});}
+function closeChat(){document.getElementById('chatWin').style.display='none';document.getElementById('users').style.display='block';}
+function sendMsg(){let t=document.getElementById('msgInput').value.trim();if(!t||!currentChat)return;let chatId=[me,currentChat].sort().join("_");db.ref("kampla_msgs/"+chatId).push({from:me,text:t,time:Date.now()});document.getElementById('msgInput').value="";}
+</script>
+</body>
+  </html>
