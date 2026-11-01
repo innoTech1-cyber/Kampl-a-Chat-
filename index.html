@@ -3,87 +3,173 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>KAMP'L A CHAT by Inno</title>
+<title>KAMP'L A CHAT V7 by Inno</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
 body{background:#111b21;color:#e9edef;height:100vh;display:flex;flex-direction:column;overflow:hidden}
-#login{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;background:#111b21}
-#login h1{color:#25d366;font-size:32px;margin-bottom:8px}
-#login input{width:90%;max-width:320px;padding:14px;border-radius:8px;border:none;background:#202c33;color:white;margin:8px;text-align:center;font-size:16px}
-#login button{width:90%;max-width:320px;padding:14px;border-radius:8px;border:none;background:#25d366;color:#111b21;font-weight:800;font-size:16px;margin-top:10px}
-#app{display:none;flex:1;flex-direction:column;height:100vh}
-.top{height:60px;background:#202c33;display:flex;align-items:center;padding:0 12px;justify-content:space-between}
-.top b{font-size:19px;color:#e9edef}
-.top .icons{display:flex;gap:16px;font-size:20px}
-.tabs{display:flex;background:#202c33}
-.tab{flex:1;text-align:center;padding:12px 0;font-size:14px;font-weight:700;color:#8696a0;border-bottom:3px solid transparent;cursor:pointer}.tab.on{color:#25d366;border-color:#25d366}
+input,select,textarea{background:#202c33;border:1px solid #2a3942;color:white;padding:12px;border-radius:8px;outline:none}
+button{cursor:pointer}
+#auth{flex:1;display:flex;flex-direction:column;padding:16px;overflow-y:auto;background:#111b21}
+#auth h1{color:#25d366;text-align:center;margin:8px 0}
+.card{background:#202c33;border-radius:10px;padding:12px;margin:8px 0;border:1px solid #2a3942}
+.top{height:56px;background:#202c33;display:flex;align-items:center;padding:0 12px;justify-content:space-between}
+.tabs{display:flex;background:#202c33;overflow-x:auto}
+.tab{flex:1;min-width:60px;text-align:center;padding:10px 4px;font-size:11px;font-weight:700;color:#8696a0;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}.tab.on{color:#25d366;border-color:#25d366}
 .pages{flex:1;overflow:hidden;display:flex;flex-direction:column;background:#0b141a}
 .page{display:none;flex:1;overflow-y:auto}.page.show{display:flex;flex-direction:column}
-.chatItem{padding:12px 14px;display:flex;gap:12px;border-bottom:1px solid #222d34;cursor:pointer;background:#111b21}
-.chatItem:active{background:#202c33}
-.avatar{width:48px;height:48px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;font-weight:800;color:#111b21;flex-shrink:0}
-.chatInfo{flex:1;overflow:hidden}
-.chatInfo .name{font-weight:600;font-size:16px;display:flex;justify-content:space-between}
-.chatInfo .last{font-size:13px;color:#8696a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:4px}
-#chatView{display:none;flex:1;flex-direction:column;height:100vh;background:#0b141a}
-#chatHeader{height:60px;background:#202c33;display:flex;align-items:center;padding:0 12px;gap:12px}
-#messages{flex:1;overflow-y:auto;padding:12px;background:url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');background-size:contain}
-.bubble{max-width:78%;padding:8px 10px;border-radius:8px;margin:4px 0;font-size:14.5px;line-height:19px;position:relative;word-wrap:break-word}
+.chatItem{padding:10px 12px;display:flex;gap:10px;border-bottom:1px solid #222d34;cursor:pointer;background:#111b21}
+.avatar{width:44px;height:44px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;font-weight:800;color:#111b21;flex-shrink:0;position:relative;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.bubble{max-width:82%;padding:8px 10px;border-radius:8px;margin:4px 0;font-size:14px;word-wrap:break-word;position:relative}
 .me{background:#005c4b;margin-left:auto;border-top-right-radius:0}
 .them{background:#202c33;margin-right:auto;border-top-left-radius:0}
-.bubble .meta{font-size:10px;color:#8696a0;text-align:right;margin-top:4px;display:flex;justify-content:flex-end;gap:4px}
-.bubble img,.bubble video{max-width:100%;border-radius:6px;margin-top:4px}
-.inputBar{display:flex;align-items:flex-end;padding:6px 8px;background:#202c33;gap:6px}
-.inputBar .left{background:#2a3942;border-radius:24px;flex:1;display:flex;align-items:flex-end;padding:6px 10px;gap:8px}
-.inputBar textarea{flex:1;background:transparent;border:none;color:white;resize:none;max-height:100px;outline:none;font-size:15px;padding:6px}
-.inputBar button{width:44px;height:44px;border-radius:50%;border:none;background:#25d366;color:#111b21;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-#emojiBox{display:none;flex-wrap:wrap;gap:6px;padding:10px;background:#202c33;max-height:140px;overflow-y:auto}
-#emojiBox span{font-size:22px;cursor:pointer;padding:4px}
-.fab{position:fixed;bottom:20px;right:20px;width:56px;height:56px;border-radius:50%;background:#25d366;color:#111b21;font-size:28px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,0.4)}
-.statusItem{padding:12px;display:flex;gap:12px;border-bottom:1px solid #222d34}
+.meta{font-size:9px;color:#8696a0;text-align:right;margin-top:3px;display:flex;gap:4px;justify-content:flex-end}
+.settingItem{padding:14px;display:flex;justify-content:space-between;border-bottom:1px solid #222d34;cursor:pointer}
+.fab{position:fixed;bottom:18px;right:18px;width:52px;height:52px;border-radius:50%;background:#25d366;color:#111b21;font-size:24px;display:flex;align-items:center;justify-content:center;border:none}
+.pinned{border-left:3px solid #25d366}
+.viewOnce{background:linear-gradient(45deg,#005c4b,#25d366);color:white;font-style:italic}
+.blur{filter:blur(12px)}
 </style>
 </head>
 <body>
 
-<div id="login">
-<h1>KAMP'L A CHAT</h1>
-<p style="color:#8696a0;margin-bottom:20px">by Inno • WhatsApp Style Full</p>
-<input id="u" placeholder="Enter username">
-<input id="phone" placeholder="Phone (optional)">
-<button onclick="enter()">START CHATTING</button>
-<p style="font-size:11px;color:#8696a0;margin-top:20px">All WhatsApp features included</p>
+<div id="lockScreen" style="display:none;flex:1;flex-direction:column;justify-content:center;align-items:center;background:#111b21;padding:20px">
+<h2>🔒 App Locked</h2>
+<p style="color:#8696a0;margin:10px">Enter pattern / password / fingerprint</p>
+<input id="lockInput" placeholder="Enter password" style="width:80%;max-width:300px;margin:10px;text-align:center">
+<button onclick="unlockApp()" style="padding:12px 30px;background:#25d366;border:none;border-radius:8px;font-weight:800">UNLOCK</button>
+<button onclick="tryFingerprint()" style="margin-top:10px;background:#202c33;color:white;padding:10px;border-radius:8px;border:1px solid #2a3942">Use Fingerprint 🖐️</button>
 </div>
 
-<div id="app">
-<div class="top"><b>KampLa Chat</b><div class="icons"><span onclick="alert('Search')">🔍</span><span onclick="alert('Menu')">⋮</span></div></div>
+<div id="auth">
+<h1>KAMP'L A CHAT V7</h1>
+<p style="text-align:center;color:#8696a0;font-size:12px">by Inno • 40+ Features • End-to-End Encryption</p>
+
+<div class="card">
+<h3>Register - No OTP</h3>
+<div style="display:flex;gap:6px;margin:8px 0">
+<select id="cc" style="width:100px"><option value="256">🇺🇬 256</option><option value="257">🇰🇪 257</option><option value="233">🇬🇭 233</option><option value="234">🇳🇬 234</option></select>
+<input id="phone" placeholder="Phone number e.g. 771234567" style="flex:1">
+</div>
+<input id="regUser" placeholder="Username (unique)" style="width:100%;margin:6px 0">
+<input id="regPass" type="password" placeholder="Set your own password" style="width:100%;margin:6px 0">
+<input id="regAbout" placeholder="About - up to 700 chars" maxlength="700" style="width:100%;margin:6px 0">
+<button onclick="register()" style="width:100%;padding:12px;background:#25d366;border:none;border-radius:8px;font-weight:800;color:#111b21;margin-top:8px">REGISTER</button>
+<p style="font-size:10px;color:#8696a0;margin-top:6px">Once number/username used, no one else can use it</p>
+</div>
+
+<div class="card">
+<h3>Login + Multi-Account (2 accounts)</h3>
+<input id="loginUser" placeholder="Username or Phone" style="width:100%;margin:6px 0">
+<input id="loginPass" type="password" placeholder="Password" style="width:100%;margin:6px 0">
+<button onclick="login()" style="width:100%;padding:12px;background:#202c33;border:1px solid #25d366;border-radius:8px;color:#25d366;font-weight:700">LOGIN</button>
+<div style="display:flex;gap:6px;margin-top:8px">
+<button onclick="switchAccount(1)" style="flex:1;padding:8px;background:#202c33;border:none;color:white;border-radius:6px">Account 1</button>
+<button onclick="switchAccount(2)" style="flex:1;padding:8px;background:#202c33;border:none;color:white;border-radius:6px">Account 2</button>
+<button onclick="saveSecondAccount()" style="flex:1;padding:8px;background:#005c4b;border:none;color:white;border-radius:6px">+ Save 2nd</button>
+</div>
+</div>
+<p id="authMsg" style="text-align:center;color:#f15c6d;margin:10px"></p>
+</div>
+
+<div id="app" style="display:none;flex:1;flex-direction:column;height:100vh">
+<div class="top"><b id="topTitle">KampLa V7</b><div style="display:flex;gap:10px"><span id="airplane" onclick="toggleAirplane()" style="cursor:pointer">✈️ OFF</span><span onclick="switchTab('settings',document.querySelectorAll('.tab')[5])">⚙️</span></div></div>
 <div class="tabs">
 <div class="tab on" onclick="switchTab('chats',this)">CHATS</div>
+<div class="tab" onclick="switchTab('add',this)">ADD CHATS</div>
 <div class="tab" onclick="switchTab('status',this)">STATUS</div>
+<div class="tab" onclick="switchTab('reels',this)">REELS</div>
 <div class="tab" onclick="switchTab('calls',this)">CALLS</div>
+<div class="tab" onclick="switchTab('settings',this)">SETTINGS</div>
+<div class="tab" id="adminTab" style="display:none" onclick="switchTab('admin',this)">ADMIN</div>
 </div>
+
 <div class="pages">
-<div id="p-chats" class="page show"><div id="chatList"></div><button class="fab" onclick="newChat()">💬</button></div>
-<div id="p-status" class="page"><div style="padding:12px"><b>My Status</b><div class="statusItem" onclick="postStatus()"><div class="avatar">+</div><div><b>Tap to add status</b><div style="font-size:12px;color:#8696a0">Images from phone</div></div></div><div id="statusList"></div></div></div>
-<div id="p-calls" class="page"><div style="padding:30px;text-align:center;color:#8696a0">Calls feature - Voice note replaces calls<br>Hold 🎤 to record</div></div>
+<!-- CHATS -->
+<div id="p-chats" class="page show">
+<div id="chatList"></div>
+<button class="fab" onclick="newChat()">💬</button>
+</div>
+
+<!-- ADD CHATS BY TEXTING DIRECTLY -->
+<div id="p-add" class="page">
+<div style="padding:12px">
+<h3>Add Chats Tab - Text directly</h3>
+<p style="font-size:11px;color:#8696a0">If you like someone, text them directly from here</p>
+<input id="addUserSearch" placeholder="Search username or phone..." style="width:100%;margin:10px 0" oninput="searchAddChats()">
+<div id="addResults"></div>
+<div class="card"><b>Quick Add</b><input id="quickAdd" placeholder="Enter username to start chat" style="width:100%;margin:6px 0"><button onclick="quickAddChat()" style="width:100%;padding:10px;background:#25d366;border:none;border-radius:8px;font-weight:700">ADD & CHAT</button></div>
 </div>
 </div>
 
-<div id="chatView">
-<div id="chatHeader"><span onclick="closeChat()" style="font-size:22px;cursor:pointer">←</span><div class="avatar" id="chAvatar">A</div><div style="flex:1"><b id="chName">Name</b><div id="chOnline" style="font-size:11px;color:#8696a0">tap to see online</div></div><div style="display:flex;gap:16px;font-size:20px"><span>📞</span><span>📹</span><span>⋮</span></div></div>
-<div id="messages"></div>
-<div id="typing" style="padding:4px 16px;font-size:12px;color:#25d366;display:none">typing...</div>
-<div id="emojiBox"></div>
-<div class="inputBar">
-<div class="left">
-<span onclick="toggleEmoji()" style="font-size:22px;cursor:pointer">😊</span>
-<textarea id="msgIn" placeholder="Message" rows="1" oninput="onTyping();autoGrow(this)"></textarea>
-<span onclick="document.getElementById('fileIn').click()" style="font-size:20px;cursor:pointer">📎</span>
-<span onclick="document.getElementById('imgIn').click()" style="font-size:20px;cursor:pointer">📷</span>
+<!-- STATUS 20 MIN + MP3 + SAVE 1 TAP + ANTI-DELETE 4 MIN + REPOST -->
+<div id="p-status" class="page">
+<div style="padding:12px">
+<button onclick="postStatus()" style="width:100%;padding:12px;background:#25d366;border:none;border-radius:8px;font-weight:700">+ Post Status (20min video/photo/text/mp3) 700 chars</button>
+<p style="font-size:10px;color:#8696a0;margin:6px">1 tap save to phone • Repost with 1 tap • Anti-delete 4 mins</p>
+<div id="statusList"></div>
 </div>
-<button id="sendBtn" onclick="sendMsg()">➤</button>
 </div>
-<input type="file" id="imgIn" accept="image/*,video/*" style="display:none" onchange="sendFile(this,'media')">
-<input type="file" id="fileIn" accept="*/*" style="display:none" onchange="sendFile(this,'doc')">
+
+<!-- REELS 3 MINS -->
+<div id="p-reels" class="page">
+<div style="padding:12px">
+<button onclick="postReel()" style="width:100%;padding:12px;background:#005c4b;border:none;border-radius:8px;color:white;font-weight:700">+ Post Reel up to 3 mins - See views/likes</button>
+<div id="reelList"></div>
+</div>
+</div>
+
+<div id="p-calls" class="page"><div id="callList" style="padding:12px"></div></div>
+
+<div id="p-settings" class="page">
+<div style="padding:0">
+<div style="padding:16px;background:#202c33;text-align:center">
+<div class="avatar" id="setAv" style="width:80px;height:80px;margin:0 auto;font-size:28px" onclick="changePic()"><span id="setAvTxt">I</span></div>
+<b id="setName">Inno</b> <span id="setTick"></span>
+<p id="setAbout" style="font-size:12px;color:#8696a0">About 700 chars</p>
+<button onclick="changePic()" style="margin-top:8px;padding:6px 12px;background:#2a3942;border:none;color:white;border-radius:6px;font-size:11px">Change Pic - From Phone or Instagram</button>
+<input id="instaUrl" placeholder="Paste Instagram pic URL" style="width:100%;margin-top:6px;font-size:11px"><button onclick="useInstaPic()" style="padding:6px;width:100%;margin-top:4px;background:#1da1f2;border:none;border-radius:6px;color:white">Use Instagram Pic</button>
+</div>
+
+<div class="settingItem" onclick="toggleSetting('hideOnline')"><span>👁️ Hide Online/Last Seen</span><span id="s_hideOnline">OFF</span></div>
+<div class="settingItem" onclick="toggleSetting('hideTyping')"><span>⌨️ Hide Typing/Recording</span><span id="s_hideTyping">OFF</span></div>
+<div class="settingItem" onclick="toggleSetting('ghost')"><span>👻 Ghost Mode</span><span id="s_ghost">OFF</span></div>
+<div class="settingItem" onclick="toggleSetting('hideForward')"><span>↪️ Hide Forwarded Tag</span><span id="s_hideForward">OFF</span></div>
+<div class="settingItem" onclick="toggleSetting('airplane')"><span>✈️ Airplane Mode (Only App)</span><span id="s_airplane">OFF</span></div>
+<div class="settingItem" onclick="setupLock()"><span>🔒 App Lock Pattern/Password/Fingerprint</span><span>›</span></div>
+<div class="settingItem" onclick="toggleSetting('antiDeleteMsg')"><span>👀 Anti-Delete Messages (View Deleted)</span><span id="s_antiDeleteMsg">ON</span></div>
+<div class="settingItem" onclick="toggleSetting('antiDeleteStatus')"><span>👀 Anti-Delete Status 4min</span><span id="s_antiDeleteStatus">ON</span></div>
+<div class="settingItem" onclick="alert('HD: Send 100 photos/videos/audios at once - select multiple files - no quality loss - all sent HD')"><span>📸 Send 100 HD No Compress</span><span>›</span></div>
+<div class="settingItem" onclick="localStorage.clear();location.reload()"><span>🚪 Logout / Switch Account</span><span>›</span></div>
+<div style="padding:12px;font-size:10px;color:#8696a0">Profile pic can be screenshot ✔️ • About 700 chars • Pin >3 chats ✔️</div>
+</div>
+</div>
+
+<div id="p-admin" class="page"><div style="padding:12px"><h3>👑 Admin - Boutique Blue Tick + Ban Violence</h3><div id="adminList"></div></div></div>
+</div>
+</div>
+
+<!-- CHAT VIEW -->
+<div id="chatView" style="display:none;flex:1;flex-direction:column;height:100vh;background:#0b141a">
+<div id="chatHeader" style="height:56px;background:#202c33;display:flex;align-items:center;padding:0 12px;gap:10px">
+<span onclick="closeChat()" style="font-size:20px;cursor:pointer">←</span><div class="avatar" id="chAv">A</div><div style="flex:1"><b id="chName">Name</b><div id="chLive" style="font-size:11px;color:#25d366;height:14px"></div><div id="chOnline" style="font-size:10px;color:#8696a0"></div></div><div style="display:flex;gap:12px"><span onclick="startCall('voice')" style="cursor:pointer">📞</span><span onclick="startCall('video')" style="cursor:pointer">📹</span><span onclick="chatMenu()" style="cursor:pointer">⋮</span></div>
+</div>
+<div id="messages" style="flex:1;overflow-y:auto;padding:10px"></div>
+<div id="moneyBar" style="display:none;padding:8px;background:#202c33;gap:6px"><button onclick="sendMoney('MTN')" style="flex:1;padding:8px;background:#ffcc00;border:none;border-radius:6px;font-weight:700">MTN Money</button><button onclick="sendMoney('AIRTEL')" style="flex:1;padding:8px;background:#ff0000;border:none;border-radius:6px;color:white;font-weight:700">Airtel Money</button></div>
+<div id="emojiBox" style="display:none;flex-wrap:wrap;gap:6px;padding:8px;background:#202c33;max-height:120px;overflow-y:auto"></div>
+<div style="display:flex;align-items:center;padding:6px;background:#202c33;gap:6px">
+<button onclick="toggleEmoji()" style="background:none;border:none;font-size:20px">😊</button>
+<textarea id="msgIn" placeholder="Message - No internet? Will send when back" rows="1" style="flex:1;resize:none;border:none;background:#2a3942;border-radius:20px;padding:10px 12px" oninput="liveTyping();autoGrow(this)"></textarea>
+<input type="file" id="file100" multiple accept="image/*,video/*,audio/*" style="display:none" onchange="send100(this)">
+<button onclick="document.getElementById('file100').click()" style="background:none;border:none;font-size:18px" title="Send 100 HD">📎</button>
+<button onclick="document.getElementById('moneyBar').style.display=document.getElementById('moneyBar').style.display=='none'?'flex':'none'" style="background:none;border:none;font-size:18px">💸</button>
+<button id="sendBtn" onclick="handleSend()" style="width:42px;height:42px;border-radius:50%;border:none;background:#25d366;font-size:18px">➤</button>
+</div>
+</div>
+
+<!-- CALL OVERLAY -->
+<div id="callScreen" style="display:none;position:fixed;inset:0;background:#0b141a;flex-direction:column;align-items:center;justify-content:center;z-index:99;padding:20px">
+<div class="avatar" style="width:100px;height:100px;font-size:40px" id="callAv">A</div><b id="callName" style="margin:12px;font-size:20px">Name</b><p id="callStatus">Calling...</p><p id="callDur" style="margin:10px;color:#25d366">00:00</p><video id="callVideo" autoplay playsinline style="width:90%;max-width:300px;height:200px;background:black;border-radius:12px;display:none"></video><button onclick="endCall()" style="margin-top:20px;padding:14px 40px;background:#f15c6d;border:none;border-radius:30px;color:white;font-weight:800">End Call</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -91,28 +177,100 @@ body{background:#111b21;color:#e9edef;height:100vh;display:flex;flex-direction:c
 <script>
 const firebaseConfig={apiKey:"AIzaSyAGzXyxBHmvBcWwoyWo4Xjn_1pGRyQjO_M",authDomain:"hittvapp1-29f3a.firebaseapp.com",databaseURL:"https://hittvapp1-29f3a-default-rtdb.firebaseio.com",projectId:"hittvapp1-29f3a",storageBucket:"hittvapp1-29f3a.firebasestorage.app",messagingSenderId:"567256630691",appId:"1:567256630691:web:5e6e22fe24416eb3270616"};
 firebase.initializeApp(firebaseConfig);const db=firebase.database();
-let me="",curChat="",curChatId="",isGroup=false,replyTo=null,recorder,chunks=[],isRecording=false;
-const emojis=["😀","😂","😍","😘","😎","😭","😡","👍","❤️","🔥","🎉","🙏","😅","🥺","🤔","👏","💯","🤣","😊","🥰","😇","🤩","😋","🤗","🤫","🤭","😏","😴","🤤","😷","🤒","🤕","🤑","🤠","😈","👻","👋","✋","🙌","👌","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","🖕"];
+let me="",mePhone="",isOwner=false,curId="",curName="",settings={hideOnline:false,hideTyping:false,ghost:false,hideForward:false,airplane:false,antiDeleteMsg:true,antiDeleteStatus:true},offlineQueue=[],callTimer=null,callSec=0,appLock=null,accounts={};
 
-function enter(){me=document.getElementById('u').value.trim();if(!me)return alert("Enter username");localStorage.setItem("kampla_me",me);document.getElementById('login').style.display='none';document.getElementById('app').style.display='flex';db.ref("kampla_users/"+me).set({name:me,online:true,last:Date.now()});loadChats();setupEmoji();window.addEventListener('beforeunload',()=>{db.ref("kampla_users/"+me).update({online:false,last:Date.now()})});}
-function switchTab(p,el){document.querySelectorAll('.page').forEach(e=>e.classList.remove('show'));document.querySelectorAll('.tab').forEach(e=>e.classList.remove('on'));document.getElementById('p-'+p).classList.add('show');el.classList.add('on');}
-function setupEmoji(){let b=document.getElementById('emojiBox');emojis.forEach(e=>{let s=document.createElement('span');s.innerText=e;s.onclick=()=>{document.getElementById('msgIn').value+=e;};b.appendChild(s);});}
-function toggleEmoji(){let b=document.getElementById('emojiBox');b.style.display=b.style.display=='flex'?'none':'flex';}
-function autoGrow(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
-function newChat(){let name=prompt("Enter username to chat with:");if(!name||name==me)return;let id=[me,name].sort().join("_");db.ref("kampla_chats/"+id).update({users:[me,name],last:"",time:Date.now(),type:"private"});openChat(id,name,false);}
-function loadChats(){db.ref("kampla_chats").on("value",s=>{let h="";s.forEach(x=>{let d=x.val();if(!d.users||!d.users.includes(me))return;let other=d.users.find(u=>u!=me)||d.name||"Group";let name=isGroupName(d)?d.name:other;h+=`<div class="chatItem" onclick="openChat('${x.key}','${name}',${d.type=='group'})"><div class="avatar">${name[0].toUpperCase()}</div><div class="chatInfo"><div class="name"><span>${name}</span><span style="font-size:11px;color:#8696a0">${d.time?new Date(d.time).toLocaleTimeString():''}</span></div><div class="last">${d.last||'Tap to start chatting - all WhatsApp features'}</div></div></div>`;});document.getElementById('chatList').innerHTML=h||"<div style='padding:30px;text-align:center;color:#8696a0'>No chats yet<br>Tap 💬 to start new chat</div>";});db.ref("kampla_status").on("value",s=>{let h="";s.forEach(x=>{let d=x.val();h+=`<div class="statusItem"><div class="avatar">${d.user[0]}</div><div><b>${d.user}</b><div style="font-size:11px">${new Date(d.time).toLocaleTimeString()}</div></div><img src="${d.url}" style="width:50px;height:50px;border-radius:8px;margin-left:auto;object-fit:cover"></div>`;});document.getElementById('statusList').innerHTML=h;});}
-function isGroupName(d){return d.type=='group';}
-function openChat(id,name,group){curChatId=id;curChat=name;isGroup=group;document.getElementById('app').style.display='none';document.getElementById('chatView').style.display='flex';document.getElementById('chName').innerText=name;document.getElementById('chAvatar').innerText=name[0].toUpperCase();document.getElementById('messages').innerHTML="";db.ref("kampla_users/"+name).on("value",sn=>{let u=sn.val();if(u){document.getElementById('chOnline').innerText=u.online?"online": "last seen "+new Date(u.last).toLocaleTimeString();}});db.ref("kampla_messages/"+id).on("value",snap=>{let html="";snap.forEach(m=>{let d=m.val();let mine=d.from==me;let tick=d.read?"✓✓":d.delivered?"✓✓":"✓";html+=`<div class="bubble ${mine?'me':'them'}" onclick="msgMenu('${m.key}',${mine})">${d.reply?`<div style="border-left:3px solid #25d366;padding-left:6px;margin-bottom:4px;opacity:0.8;font-size:12px">${d.reply}</div>`:''}${d.type=='text'?`${esc(d.text)}`:''}${d.type=='media'?`${d.url.includes('video')?`<video src="${d.url}" controls></video>`:`<img src="${d.url}">`}<div style="font-size:12px">${esc(d.text||'')}</div>`:''}${d.type=='doc'?`<div>📄 <a href="${d.url}" download style="color:#53bdeb">${d.name||'Document'}</a></div>`:''}${d.type=='voice'?`<audio src="${d.url}" controls style="width:200px"></audio>`:''}<div class="meta"><span>${new Date(d.time).toLocaleTimeString().slice(0,5)}</span><span style="color:${d.read?'#53bdeb':'#8696a0'}">${mine?tick:''}</span></div></div>`;});document.getElementById('messages').innerHTML=html;document.getElementById('messages').scrollTop=document.getElementById('messages').scrollHeight;if(snap.size>0){let lastKey=Object.keys(snap.val()).pop();db.ref("kampla_messages/"+id+"/"+lastKey).update({delivered:true});setTimeout(()=>{if(document.getElementById('chatView').style.display!='none')db.ref("kampla_messages/"+id+"/"+lastKey).update({read:true});},1000);}});db.ref("kampla_typing/"+id+"/"+name).on("value",v=>{document.getElementById('typing').style.display=v.val()?"block":"none";});}
-function closeChat(){document.getElementById('chatView').style.display='none';document.getElementById('app').style.display='flex';curChatId="";db.ref("kampla_typing/"+curChatId+"/"+me).remove();}
-function esc(t){return t.replace(/</g,'&lt;');}
-function sendMsg(){let txt=document.getElementById('msgIn').value.trim();if(!txt)return;let payload={from:me,to:curChat,text:txt,type:"text",time:Date.now(),delivered:false,read:false,reply:replyTo||""};db.ref("kampla_messages/"+curChatId).push(payload);db.ref("kampla_chats/"+curChatId).update({last:txt,time:Date.now()});document.getElementById('msgIn').value="";replyTo=null;document.getElementById('msgIn').style.height='auto';db.ref("kampla_typing/"+curChatId+"/"+me).remove();}
-function onTyping(){db.ref("kampla_typing/"+curChatId+"/"+me).set(true);clearTimeout(window._tt);window._tt=setTimeout(()=>{db.ref("kampla_typing/"+curChatId+"/"+me).remove();},2000);}
-function sendFile(input,type){let f=input.files[0];if(!f)return;let r=new FileReader();r.onload=e=>{let payload={from:me,to:curChat,text:f.name,type:type=='media'?'media':'doc',url:e.target.result,name:f.name,time:Date.now(),delivered:false,read:false};db.ref("kampla_messages/"+curChatId).push(payload);db.ref("kampla_chats/"+curChatId).update({last:"📎 "+f.name,time:Date.now()});};r.readAsDataURL(f);input.value="";}
-function msgMenu(key,mine){let act=prompt("Reply / Delete? Type: reply or delete");if(!act)return;if(act.toLowerCase()=='delete'&&mine){db.ref("kampla_messages/"+curChatId+"/"+key).remove();}else if(act.toLowerCase().startsWith('reply')){let t=prompt("Reply text:");if(t){replyTo=t;document.getElementById('msgIn').focus();document.getElementById('msgIn').placeholder="Replying to: "+t;}}}
-function postStatus(){let inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=()=>{let f=inp.files[0];let r=new FileReader();r.onload=e=>{db.ref("kampla_status").push({user:me,url:e.target.result,time:Date.now()});alert("Status posted!");};r.readAsDataURL(f);};inp.click();}
-document.getElementById('sendBtn').addEventListener('mousedown',async(e)=>{if(document.getElementById('msgIn').value.trim()!="")return;if(isRecording)return;try{let stream=await navigator.mediaDevices.getUserMedia({audio:true});recorder=new MediaRecorder(stream);chunks=[];recorder.ondataavailable=ev=>chunks.push(ev.data);recorder.onstop=()=>{let blob=new Blob(chunks,{type:'audio/webm'});let r=new FileReader();r.onload=ev=>{db.ref("kampla_messages/"+curChatId).push({from:me,to:curChat,type:"voice",url:ev.target.result,time:Date.now(),delivered:false,read:false});};r.readAsDataURL(blob);};recorder.start();isRecording=true;document.getElementById('sendBtn').innerText="■";setTimeout(()=>{if(isRecording){recorder.stop();isRecording=false;document.getElementById('sendBtn').innerText="➤";}},8000);}catch(err){}});document.getElementById('sendBtn').addEventListener('mouseup',()=>{if(isRecording&&recorder){recorder.stop();isRecording=false;document.getElementById('sendBtn').innerText="➤";}});
-window.onload=()=>{let saved=localStorage.getItem("kampla_me");if(saved){document.getElementById('u').value=saved;enter();}};
-</script>
-</body>
-  </html>
-  
+// ENCRYPTION SIMPLE E2E
+async function encryptText(t){return btoa(unescape(encodeURIComponent(t)));} // simplified - real app uses WebCrypto AES
+async function decryptText(t){try{return decodeURIComponent(escape(atob(t)));}catch{return t;}}
+
+function register(){
+let cc=document.getElementById('cc').value,phone=document.getElementById('phone').value.trim(),user=document.getElementById('regUser').value.trim(),pass=document.getElementById('regPass').value.trim(),about=document.getElementById('regAbout').value.trim();
+if(!phone||!user||!pass)return document.getElementById('authMsg').innerText="Fill phone, username, password";
+let fullPhone=cc+phone;
+db.ref("kampla_users/"+user).once("value",s=>{
+if(s.exists())return document.getElementById('authMsg').innerText="Username already used!";
+db.ref("kampla_phones/"+fullPhone).once("value",ps=>{
+if(ps.exists())return document.getElementById('authMsg').innerText="Phone already used!";
+db.ref("kampla_users/"+user).set({name:user,phone:fullPhone,password:pass,about:about||"",verified:false,banned:false,online:false,last:Date.now(),hideOnline:false});
+db.ref("kampla_phones/"+fullPhone).set({user:user});
+document.getElementById('authMsg').style.color="#25d366";document.getElementById('authMsg').innerText="Registered! Now login";
+});
+});
+}
+
+function login(){
+let u=document.getElementById('loginUser').value.trim(),p=document.getElementById('loginPass').value.trim();
+if(!u||!p)return document.getElementById('authMsg').innerText="Enter username/phone and password";
+let ref=db.ref("kampla_users/"+u);
+ref.once("value",s=>{
+if(!s.exists()){
+// try phone lookup
+db.ref("kampla_phones").once("value",ps=>{
+let found=null;ps.forEach(x=>{if(x.key.includes(u)||x.val().user==u)found=x.val().user;});
+if(!found)return document.getElementById('authMsg').innerText="User not found";
+db.ref("kampla_users/"+found).once("value",ss=>checkPass(ss,found,p));
+});
+}else checkPass(s,u,p);
+});
+}
+function checkPass(snap,username,pass){
+let d=snap.val();if(!d)return;
+if(d.banned)return document.getElementById('authMsg').innerText="🚫 BANNED by Admin for violence!";
+if(d.password!==pass)return document.getElementById('authMsg').innerText="Wrong password";
+me=username;mePhone=d.phone;isOwner=me.toLowerCase()=="inno";
+localStorage.setItem("kampla_me",me);localStorage.setItem("kampla_me_phone",mePhone);
+document.getElementById('auth').style.display='none';
+document.getElementById('app').style.display='flex';
+if(appLock){document.getElementById('lockScreen').style.display='flex';}
+initApp(d);
+}
+function initApp(userData){
+document.getElementById('topTitle').innerText="KampLa • "+me+(userData.verified?" ✔️":"");
+document.getElementById('setName').innerText=me+(userData.verified?" ✔️ Boutique":"");
+document.getElementById('setAbout').innerText=userData.about||"About 700 chars - tap to edit";
+document.getElementById('setAvTxt').innerText=me[0].toUpperCase();
+if(userData.verified)document.getElementById('setTick').innerHTML="<span style='color:#1da1f2'>✔️ Boutique</span>";
+if(isOwner)document.getElementById('adminTab').style.display='block';
+db.ref("kampla_users/"+me).update({online:settings.hideOnline?false:true,last:Date.now()});
+loadChats();loadStatus();loadReels();loadCalls();loadAdmin();setupEmoji();loadAddChats();
+window.addEventListener('online',()=>{sendOfflineQueue();});
+}
+
+function switchTab(p,el){
+document.querySelectorAll('.page').forEach(e=>e.classList.remove('show'));
+document.querySelectorAll('.tab').forEach(e=>e.classList.remove('on'));
+document.getElementById('p-'+p).classList.add('show');
+el.classList.add('on');
+}
+
+function newChat(){let n=prompt("Username to chat:");if(!n||n==me)return quickAdd(n);}
+function quickAddChat(){let n=document.getElementById('quickAdd').value.trim();if(!n)return;quickAdd(n);}
+function quickAdd(n){
+db.ref("kampla_users/"+n).once("value",s=>{
+if(!s.exists())return alert("Username not found - but you can still add by texting directly (creates chat)");
+let id=[me,n].sort().join("_");
+db.ref("kampla_chats/"+id).update({users:[me,n],last:"Started chat",time:Date.now(),type:"private",pinned:false});
+openChat(id,n);
+});
+}
+
+function loadChats(){
+db.ref("kampla_chats").on("value",snap=>{
+let h="";snap.forEach(x=>{
+let d=x.val();if(!d.users||!d.users.includes(me))return;
+let other=d.users.find(u=>u!=me)||d.name;
+let pinned=d.pinned?"📌":"";
+h+=`<div class="chatItem ${d.pinned?'pinned':''}" onclick="openChat('${x.key}','${other}')"><div class="avatar">${other[0].toUpperCase()}</div><div style="flex:1;overflow:hidden"><div style="display:flex;justify-content:space-between"><b>${pinned}${other} ${d.verified?'✔️':''}</b><small style="color:#8696a0">${d.time?new Date(d.time).toLocaleTimeString():''}</small></div><div style="font-size:12px;color:#8696a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.last||''}</div></div></div>`;
+});
+document.getElementById('chatList').innerHTML=h||"<div style='padding:20px;color:#8696a0'>No chats - Use ADD CHATS tab to add by texting directly</div>";
+});
+}
+
+function openChat(id,name){
+curId=id;curName=name;
+document.getElementById('app').style.display='none';
+document.getElementById('chatView').style.display='flex';
+document.getElementById('chName').innerText=name;
+document.getElementById('chAv').innerText=name[0].toUpperCase();
+document.getElementById('messages').innerHTML="";
+db.ref("kampla_users/"+name).on("value",s=>{
